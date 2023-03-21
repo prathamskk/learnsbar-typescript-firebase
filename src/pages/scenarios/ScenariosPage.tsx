@@ -1,36 +1,44 @@
-import { collection, getDocs, limit, orderBy, query, startAfter } from 'firebase/firestore'
+import {
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  QueryDocumentSnapshot,
+  startAfter,
+} from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { db, Scenario, scenariosCol } from '../../config/firebase'
+import { Scenario, scenariosCol } from '../../models/collections'
 
 const ScenariosPage = () => {
   const [scenarios, setScenarios] = useState<Scenario[]>([])
-  const [lastScenario, setLastScenario] = useState<any>()
-
+  const [lastScenario, setLastScenario] = useState<QueryDocumentSnapshot<Scenario>>()
+  const [disabled, setDisabled] = useState(false)
   useEffect(() => {
     // Query the first page of docs
     const fetchFirst = async () => {
-      const first = query(scenariosCol, limit(25))
+      const first = query(scenariosCol, orderBy('scenario_name'), limit(2))
       const documentSnapshots = await getDocs(first)
-      const scenariosList: React.SetStateAction<Scenario[]> = []
-      documentSnapshots.forEach((singleElement) => {
-        scenariosList.push(singleElement.data())
+      const scenariosList = documentSnapshots.docs.map((doc) => {
+        return doc.data()
       })
-      setLastScenario(documentSnapshots.docs[documentSnapshots.docs.length - 1])
       setScenarios(scenariosList)
+      setLastScenario(documentSnapshots.docs[documentSnapshots.docs.length - 1])
     }
 
     fetchFirst()
   }, [])
 
   const fetchNext = async () => {
-    const next = query(scenariosCol, startAfter(lastScenario), limit(25))
+    const next = query(scenariosCol, orderBy('scenario_name'), startAfter(lastScenario), limit(2))
     const documentSnapshots = await getDocs(next)
-    const scenariosList: React.SetStateAction<Scenario[]> = []
-    documentSnapshots.forEach((singleElement) => {
-      scenariosList.push(singleElement.data())
+    const scenariosList = documentSnapshots.docs.map((doc) => {
+      return doc.data()
     })
-    setLastScenario(documentSnapshots.docs[documentSnapshots.docs.length - 1])
     setScenarios((prev) => [...prev, ...scenariosList])
+    setLastScenario(documentSnapshots.docs[documentSnapshots.docs.length - 1])
+    if (documentSnapshots.empty) {
+      setDisabled(true)
+    }
   }
 
   return (
@@ -38,6 +46,10 @@ const ScenariosPage = () => {
       {scenarios.map((scenario) => (
         <div key={scenario.id}>{scenario.scenario_name}</div>
       ))}
+
+      <button onClick={fetchNext} disabled={disabled}>
+        FETCH MORE
+      </button>
     </div>
   )
 }
