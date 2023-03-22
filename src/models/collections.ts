@@ -9,9 +9,17 @@ import {
 import { db } from '../config/firebase'
 
 // This is just a helper to add the type to the db responses
-const createCollection = <T = DocumentData>(collectionName: string) => {
-  return collection(db, collectionName).withConverter(
-    converter<Scenario>(),
+export const createCollection = <T = DocumentData>(collectionName: string) => {
+  return collection(db, collectionName).withConverter(converter()) as CollectionReference<T>
+}
+
+export const createSubCollection = <T = DocumentData>(
+  collectionName: string,
+  documentId: string,
+  subCollectionName: string,
+) => {
+  return collection(db, collectionName, documentId, subCollectionName).withConverter(
+    converter(),
   ) as CollectionReference<T>
 }
 
@@ -24,29 +32,29 @@ const converter = <T>() => ({
 
 export interface Scenario {
   id?: string | null
-  scenario_name: string
-  scenario_video_link: string
-  exemplar_video_link: string
-  short_description: string
-  scenario_description: string
+  scenarioName: string
+  scenarioVideoLink: string
+  exemplarVideoLink: string
+  shortDescription: string
+  description: string
 }
 
 export interface User {
   id?: string | null
-  fcm_token: string | null
-  has_enabled_notification: boolean
-  roles: object
+  fcmToken: string | null
+  hasEnabledNotification: boolean
+  roles?: object
 }
 
 export interface Attempt {
   id?: string | null
-  scenario_id: string
-  submission_timestamp: Timestamp
-  has_graded: boolean
+  scenarioId: string
+  submissionTimestamp: Timestamp
+  hasGraded: boolean
   grade: object
-  before_assessment_recording_link: string
-  after_assessment_recording_link: string
-  self_assessment_answers: {
+  beforeAssessmentRecordingLink: string
+  afterAssessmentRecordingLink: string
+  selfAssessmentAnswers: {
     question1: boolean
     question2: boolean
     question3: boolean
@@ -58,23 +66,21 @@ export interface Attempt {
     question9: boolean
     question10: boolean
   }
-  self_reflective_answers: {
+  selfReflectiveAnswers: {
     question1: boolean
     question2: string
   }
 }
 
 export interface Notification {
-  receiver_id: string
-  notification_sent_timestamp: Timestamp
-  is_notification_read: boolean
-  notification_title: string
-  notification_body: string
-  attempt_url: string
+  id?: string | null
+  notificationSentTimestamp: Timestamp
+  isNotificationRead: boolean
+  notificationTitle: string
+  notificationBody: string
+  attemptUrl: string
 }
 
 // export all your collections
 export const scenariosCol = createCollection<Scenario>('scenarios')
-export const notificationsCol = createCollection<Notification>('notifications')
-export const attemptsCol = createCollection<Attempt>('attempts')
 export const usersCol = createCollection<User>('users')

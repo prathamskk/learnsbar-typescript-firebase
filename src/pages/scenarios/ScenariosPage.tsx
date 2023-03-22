@@ -6,7 +6,8 @@ import {
   QueryDocumentSnapshot,
   startAfter,
 } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Scenario, scenariosCol } from '../../models/collections'
 
 const ScenariosPage = () => {
@@ -16,20 +17,31 @@ const ScenariosPage = () => {
   useEffect(() => {
     // Query the first page of docs
     const fetchFirst = async () => {
-      const first = query(scenariosCol, orderBy('scenario_name'), limit(2))
+      const first = query(scenariosCol, orderBy('scenarioName'), limit(2))
       const documentSnapshots = await getDocs(first)
       const scenariosList = documentSnapshots.docs.map((doc) => {
         return doc.data()
       })
+      if (documentSnapshots.empty) {
+        setDisabled(true)
+      }
       setScenarios(scenariosList)
       setLastScenario(documentSnapshots.docs[documentSnapshots.docs.length - 1])
     }
+
+    // addDoc(scenariosCol, {
+    //   scenarioName: 'bruh2',
+    //   scenarioVideoLink: 'bruh2',
+    //   exemplarVideoLink: 'asdad2',
+    //   shortDescription: 'asdasd2',
+    //   description: 'asdasd2',
+    // })
 
     fetchFirst()
   }, [])
 
   const fetchNext = async () => {
-    const next = query(scenariosCol, orderBy('scenario_name'), startAfter(lastScenario), limit(2))
+    const next = query(scenariosCol, orderBy('scenarioName'), startAfter(lastScenario), limit(2))
     const documentSnapshots = await getDocs(next)
     const scenariosList = documentSnapshots.docs.map((doc) => {
       return doc.data()
@@ -43,9 +55,13 @@ const ScenariosPage = () => {
 
   return (
     <div>
-      {scenarios.map((scenario) => (
-        <div key={scenario.id}>{scenario.scenario_name}</div>
-      ))}
+      {scenarios.map((scenario) => {
+        return (
+          <Link to={scenario.id || ''} key={scenario.id}>
+            <div>{scenario.scenarioName}</div>
+          </Link>
+        )
+      })}
 
       <button onClick={fetchNext} disabled={disabled}>
         FETCH MORE

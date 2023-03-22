@@ -16,12 +16,10 @@ function App() {
       <Route element={<AuthRoute />}>
         <Route path='/' element={<HomePage />} />
         <Route path='attempts' element={<AttemptsPage />} />
-        <Route path='scenarios' element={<ScenariosPage />}>
-          <Route path=':scenarioId' element={<ScenarioDetailPage />}>
-            <Route path='new' element={<NewAttemptPage />} />
-            <Route path='attempts' element={<ScenarioAttemptsPage />} />
-          </Route>
-        </Route>
+        <Route path='scenarios' element={<ScenariosPage />} />
+        <Route path='scenarios/:scenarioId' element={<ScenarioDetailPage />} />
+        <Route path='scenarios/:scenarioId/new' element={<NewAttemptPage />} />
+        <Route path='scenarios/:scenarioId/attempts' element={<ScenarioAttemptsPage />} />
       </Route>
       <Route path='login' element={<LoginPage />} />
     </Routes>

@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged, User } from 'firebase/auth'
 import { auth } from '../config/firebase'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
+import Navbar from './Navbar'
 
 const AuthRoute = () => {
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-
+  const [user, setUser] = useState<User | null>(null)
   useEffect(() => {
     const AuthCheck = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setLoading(false)
+        setUser(user)
       } else {
         console.log('unauthorized')
         navigate('/login')
@@ -20,9 +20,18 @@ const AuthRoute = () => {
     return () => AuthCheck()
   }, [auth])
 
-  if (loading) return <p>loading ...</p>
+  if (!user) return <p>loading ...</p>
 
-  return <>{<Outlet />}</>
+  return (
+    <>
+      <Navbar user={user} />
+      <Outlet context={{ user }} />
+    </>
+  )
+}
+
+export function useUser() {
+  return useOutletContext<{ user: User }>()
 }
 
 export default AuthRoute
