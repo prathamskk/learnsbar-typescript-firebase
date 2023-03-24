@@ -5,6 +5,7 @@ import {
   query,
   QueryDocumentSnapshot,
   startAfter,
+  Timestamp,
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useUser } from '../components/AuthRoute'
@@ -56,10 +57,12 @@ const AllAttemptsPage = () => {
   return (
     <div>
       {attempts.map((attempt) => {
+        const submissionTimestamp = attempt.submissionTimestamp as Timestamp
         return (
           <div key={attempt.id}>
             <div>{attempt.scenarioId}</div>
-            <div>{attempt.submissionTimestamp.toDate().toString()}</div>
+            <div>{submissionTimestamp.toDate().toString()}</div>
+            <div>{attempt.id}</div>
           </div>
         )
       })}

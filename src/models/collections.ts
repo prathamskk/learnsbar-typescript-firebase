@@ -2,6 +2,7 @@ import {
   collection,
   CollectionReference,
   DocumentData,
+  FieldValue,
   PartialWithFieldValue,
   QueryDocumentSnapshot,
   Timestamp,
@@ -49,9 +50,9 @@ export interface User {
 export interface Attempt {
   id?: string | null
   scenarioId: string
-  submissionTimestamp: Timestamp
+  submissionTimestamp: Timestamp | FieldValue
   hasGraded: boolean
-  grade: object
+  grade?: object
   beforeAssessmentRecordingLink: string
   afterAssessmentRecordingLink: string
   selfAssessmentAnswers: {
