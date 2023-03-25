@@ -9,8 +9,22 @@ import {
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { createSubCollection, Notification } from '../models/collections'
+import { IconButton, Stack } from '@mui/material'
+import Drawer from '@mui/material/Drawer'
 
-const NotificationDrawer = (props: { user: User }) => {
+import CloseIcon from '@mui/icons-material/Close'
+import { styled } from '@mui/material/styles'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import Button from '@mui/material/Button'
+
+import Typography from '@mui/material/Typography'
+const NotificationDrawer = (props: {
+  user: User
+  drawerOpenStatus: boolean
+  setDrawerOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [lastNotification, setLastNotification] = useState<QueryDocumentSnapshot<Notification>>()
   const [disabled, setDisabled] = useState(false)
@@ -41,7 +55,7 @@ const NotificationDrawer = (props: { user: User }) => {
     const notificationsCol = createSubCollection<Notification>('users', props.user.uid, 'attempts')
     const next = query(
       notificationsCol,
-      orderBy('submissionTimestamp', 'desc'),
+      orderBy('notificationSentTimestamp', 'desc'),
       startAfter(lastNotification),
       limit(2),
     )
@@ -56,23 +70,69 @@ const NotificationDrawer = (props: { user: User }) => {
     }
   }
 
-  return (
-    <div>
-      {notifications.map((notification) => {
-        return (
-          <div key={notification.id}>
-            <div>{notification.notificationTitle}</div>
-            <div>{notification.notificationBody}</div>
-            <div>{notification.attemptUrl}</div>
-            <div>{notification.notificationSentTimestamp.toDate().toString()}</div>
-          </div>
-        )
-      })}
+  const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'space-between',
+    backgroundColor: theme.palette.primary.main,
+    color: 'white',
+    boxShadow: theme.shadows[12],
+  }))
 
-      <button onClick={fetchNext} disabled={disabled}>
-        FETCH MORE
-      </button>
-    </div>
+  return (
+    <Drawer
+      anchor='right'
+      open={props.drawerOpenStatus}
+      onClose={() => props.setDrawerOpenStatus(false)}
+    >
+      <DrawerHeader>
+        <Typography variant='h5' color='white'>
+          Alerts
+        </Typography>
+        <IconButton color='inherit' onClick={() => props.setDrawerOpenStatus(false)}>
+          <CloseIcon fontSize='large' />
+        </IconButton>
+      </DrawerHeader>
+      <Stack
+        sx={{ m: 2 }}
+        direction='column'
+        justifyContent='flex-start'
+        alignItems='center'
+        spacing={2}
+      >
+        {notifications.map((notification) => {
+          return (
+            <Card sx={{ minWidth: 275 }} key={notification.id}>
+              <CardContent>
+                <Typography variant='h5' component='div'>
+                  {notification.notificationTitle}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color='text.secondary'>
+                  {notification.notificationBody}
+                </Typography>
+                <Typography variant='body2'>
+                  {notification.notificationSentTimestamp.toDate().toString()}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size='small'>{notification.attemptUrl}</Button>
+              </CardActions>
+            </Card>
+          )
+        })}
+
+        {!disabled ? (
+          <Button onClick={fetchNext} disabled={disabled}>
+            FETCH MORE
+          </Button>
+        ) : (
+          <Typography variant='body2'>You&apos;re Up to Date</Typography>
+        )}
+      </Stack>
+    </Drawer>
   )
 }
 

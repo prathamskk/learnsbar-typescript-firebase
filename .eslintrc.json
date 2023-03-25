@@ -28,7 +28,14 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "camelcase": "error",
-    "quotes": ["error", "single"],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }
+    ],
     "no-duplicate-imports": "error"
   },
   "settings": {

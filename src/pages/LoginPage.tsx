@@ -3,7 +3,11 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 import { doc, setDoc } from 'firebase/firestore'
 import { usersCol } from '../models/collections'
-
+import { Container } from '@mui/material'
+import GoogleButton from 'react-google-button'
+import Stack from '@mui/material/Stack'
+import LearnSBARLogo from '../assets/LearnSBARLogo.png'
+import Typography from '@mui/material/Typography'
 const LoginPage = () => {
   const auth = getAuth()
   const navigate = useNavigate()
@@ -15,10 +19,10 @@ const LoginPage = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then((response) => {
         console.log(response.user.uid)
-        setDoc(doc(usersCol, response.user.uid), {
-          fcmToken: '234rdfshf',
-          hasEnabledNotification: false,
-        })
+        // setDoc(doc(usersCol, response.user.uid), {
+        //   fcmToken: '234rdfshf',
+        //   hasEnabledNotification: false,
+        // })
         console.log('doc set')
 
         navigate('/')
@@ -30,12 +34,13 @@ const LoginPage = () => {
   }
 
   return (
-    <div>
-      <p>Login Page</p>
-      <button onClick={() => signInWithGoogle()} disabled={authing}>
-        Sign in with Google
-      </button>
-    </div>
+    <Container fixed sx={{ bgcolor: 'beige', height: '100vh' }}>
+      <Stack direction='column' justifyContent='center' alignItems='center' spacing={2}>
+        <img src={LearnSBARLogo} />
+        <Typography variant='h3'>LearnSBAR</Typography>
+        <GoogleButton disabled={authing} onClick={() => signInWithGoogle()} />
+      </Stack>
+    </Container>
   )
 }
 
