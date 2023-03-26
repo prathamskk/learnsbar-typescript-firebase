@@ -67,11 +67,20 @@ const NewAttemptPage = () => {
           <input {...register('selfAssessmentAnswers.question8')} type='checkbox' />
           <input {...register('selfAssessmentAnswers.question9')} type='checkbox' />
           <input {...register('selfAssessmentAnswers.question10')} type='checkbox' />
+          <input {...register('selfAssessmentAnswers.question11')} type='checkbox' />
+          <input {...register('selfAssessmentAnswers.question12')} type='checkbox' />
+          <input {...register('selfAssessmentAnswers.question13')} type='checkbox' />
+          <input {...register('selfAssessmentAnswers.question14')} type='checkbox' />
+          <input {...register('selfAssessmentAnswers.question15')} type='checkbox' />
         </div>
         <div>
           <label>self reflective questions</label>
           <input {...register('selfReflectiveAnswers.question1')} type='checkbox' />
-          <input {...register('selfReflectiveAnswers.question2')} type='text' />
+          <input {...register('selfReflectiveAnswers.question2')} type='checkbox' />
+          <input {...register('selfReflectiveAnswers.question3')} type='checkbox' />
+          <input {...register('selfReflectiveAnswers.question4')} type='checkbox' />
+          <input {...register('selfReflectiveAnswers.question5')} type='checkbox' />
+          <input {...register('selfReflectiveAnswers.question6')} type='text' />
         </div>
         <div>
           <label>after assessment recording</label>

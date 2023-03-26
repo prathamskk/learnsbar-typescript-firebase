@@ -36,6 +36,7 @@ export interface Scenario {
   scenarioName: string
   scenarioVideoLink: string
   exemplarVideoLink: string
+  scenarioThumbnailLink: string
   shortDescription: string
   description: string
 }
@@ -66,10 +67,19 @@ export interface Attempt {
     question8: boolean
     question9: boolean
     question10: boolean
+    question11: boolean
+    question12: boolean
+    question13: boolean
+    question14: boolean
+    question15: boolean
   }
   selfReflectiveAnswers: {
     question1: boolean
-    question2: string
+    question2: boolean
+    question3: boolean
+    question4: boolean
+    question5: boolean
+    question6: string
   }
 }
 

@@ -13,12 +13,14 @@ import AccountCircle from '@mui/icons-material/AccountCircle'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import { auth } from '../config/firebase'
 import { Avatar, Stack } from '@mui/material'
-
+import { useNavigate } from 'react-router-dom'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 const Navbar = (props: { user: User }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [drawerOpenStatus, setDrawerOpenStatus] = useState<boolean>(false)
   const isMenuOpen = Boolean(anchorEl)
 
+  const navigate = useNavigate()
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -53,6 +55,14 @@ const Navbar = (props: { user: User }) => {
     <>
       <AppBar position='static'>
         <Toolbar>
+          <IconButton
+            size='medium'
+            aria-label='back button'
+            color='inherit'
+            onClick={() => navigate(-1)}
+          >
+            <ArrowBackIcon />
+          </IconButton>
           <Typography variant='h6' noWrap component='div' sx={{ display: { xs: 'block' } }}>
             LearnSBAR
           </Typography>
@@ -70,7 +80,6 @@ const Navbar = (props: { user: User }) => {
             </IconButton>
             <IconButton
               size='large'
-              edge='end'
               aria-label='account of current user'
               aria-controls={menuId}
               aria-haspopup='true'

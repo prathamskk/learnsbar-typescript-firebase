@@ -7,9 +7,15 @@ import {
   startAfter,
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Scenario, scenariosCol } from '../../models/collections'
-
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
+import { Stack } from '@mui/material'
 const ScenariosPage = () => {
   const [scenarios, setScenarios] = useState<Scenario[]>([])
   const [lastScenario, setLastScenario] = useState<QueryDocumentSnapshot<Scenario>>()
@@ -53,20 +59,42 @@ const ScenariosPage = () => {
     }
   }
 
+  const navigate = useNavigate()
   return (
-    <div>
+    <Stack direction='column' justifyContent='flex-start' alignItems='center' spacing={2} m={2}>
       {scenarios.map((scenario) => {
         return (
-          <Link to={scenario.id || ''} key={scenario.id}>
-            <div>{scenario.scenarioName}</div>
-          </Link>
+          <Card sx={{ width: '100%' }} key={scenario.id}>
+            <CardMedia
+              sx={{ height: 140 }}
+              image={scenario.scenarioThumbnailLink}
+              title={scenario.scenarioName}
+            />
+            <CardContent>
+              <Typography gutterBottom variant='h5' component='div'>
+                {scenario.scenarioName}
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                {scenario.shortDescription}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size='small' onClick={() => navigate(scenario.id || '')}>
+                View More
+              </Button>
+            </CardActions>
+          </Card>
         )
       })}
 
-      <button onClick={fetchNext} disabled={disabled}>
-        FETCH MORE
-      </button>
-    </div>
+      {!disabled ? (
+        <Button onClick={fetchNext} disabled={disabled}>
+          Fetch More
+        </Button>
+      ) : (
+        <Typography variant='body2'>You&apos;re Up to Date</Typography>
+      )}
+    </Stack>
   )
 }
 
