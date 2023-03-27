@@ -1,16 +1,30 @@
-import { signOut } from 'firebase/auth'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { Button, Stack } from '@mui/material'
 const HomePage = () => {
-  signOut
+  const navigate = useNavigate()
   return (
-    <div>
-      <Link to='/scenarios'>
-        <button>Scenarios Page</button>
-      </Link>
-      <Link to='/attempts'>
-        <button>All Attempts Page</button>
-      </Link>
-    </div>
+    <Stack direction={'column'} m={1} gap={1}>
+      <Button
+        size='large'
+        fullWidth={true}
+        variant='contained'
+        onClick={() => navigate('/scenarios')}
+        sx={{ height: '40vh' }}
+      >
+        Browse Scenarios
+      </Button>
+      <Button
+        color='secondary'
+        size='large'
+        fullWidth={true}
+        variant='contained'
+        type='submit'
+        sx={{ height: '40vh' }}
+        onClick={() => navigate('/attempts')}
+      >
+        All Attempts
+      </Button>
+    </Stack>
   )
 }
 

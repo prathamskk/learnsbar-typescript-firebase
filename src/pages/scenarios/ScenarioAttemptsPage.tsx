@@ -32,6 +32,7 @@ const ScenarioAttemptsPage = () => {
   const [disabled, setDisabled] = useState(false)
   const { user } = useUser()
   const { scenarioId } = useParams()
+
   useEffect(() => {
     // Query the first page of docs
     const fetchFirst = async () => {
