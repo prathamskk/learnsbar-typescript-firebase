@@ -61,8 +61,8 @@ const NewAttemptPage = () => {
           await uploadBytes(afterAssessmentRef, afterRecording).then(() => {
             console.log('Uploaded after_assessment.webm')
           })
-          data.afterAssessmentRecordingLink = await getDownloadURL(beforeAssessmentRef)
-          data.beforeAssessmentRecordingLink = await getDownloadURL(afterAssessmentRef)
+          data.beforeAssessmentRecordingLink = await getDownloadURL(beforeAssessmentRef)
+          data.afterAssessmentRecordingLink = await getDownloadURL(afterAssessmentRef)
           await setDoc(attemptRef, data)
           setSuccess(true)
           console.log(data)
