@@ -53,13 +53,13 @@ const NewAttemptPage = () => {
           const attemptRef = doc(attemptsCol)
           const attemptId = attemptRef.id
           const folderRef = ref(storage, 'user_attempts/' + user.uid + '/' + attemptId)
-          const beforeAssessmentRef = ref(folderRef, 'before_assessment.webm')
-          const afterAssessmentRef = ref(folderRef, 'after_assessment.webm')
+          const beforeAssessmentRef = ref(folderRef, 'before_assessment.wav')
+          const afterAssessmentRef = ref(folderRef, 'after_assessment.wav')
           await uploadBytes(beforeAssessmentRef, beforeRecording).then(() => {
-            console.log('Uploaded before_assessment.webm')
+            console.log('Uploaded before_assessment.wav')
           })
           await uploadBytes(afterAssessmentRef, afterRecording).then(() => {
-            console.log('Uploaded after_assessment.webm')
+            console.log('Uploaded after_assessment.wav')
           })
           data.beforeAssessmentRecordingLink = await getDownloadURL(beforeAssessmentRef)
           data.afterAssessmentRecordingLink = await getDownloadURL(afterAssessmentRef)

@@ -9,7 +9,7 @@ const HomePage = () => {
         fullWidth={true}
         variant='contained'
         onClick={() => navigate('/scenarios')}
-        sx={{ height: '40vh' }}
+        sx={{ height: '25vh' }}
       >
         Browse Scenarios
       </Button>
@@ -19,10 +19,21 @@ const HomePage = () => {
         fullWidth={true}
         variant='contained'
         type='submit'
-        sx={{ height: '40vh' }}
+        sx={{ height: '25vh' }}
         onClick={() => navigate('/attempts')}
       >
         All Attempts
+      </Button>
+      <Button
+        color='success'
+        size='large'
+        fullWidth={true}
+        variant='contained'
+        type='submit'
+        sx={{ height: '25vh' }}
+        onClick={() => navigate('/diseaseprediction')}
+      >
+        Disease Prediction
       </Button>
     </Stack>
   )

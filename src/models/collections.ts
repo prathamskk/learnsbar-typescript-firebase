@@ -53,7 +53,7 @@ export interface Attempt {
   scenarioId: string
   submissionTimestamp: Timestamp | FieldValue
   hasGraded: boolean
-  grade?: object
+  grade?: number
   beforeAssessmentRecordingLink: string
   afterAssessmentRecordingLink: string
   selfAssessmentAnswers: {

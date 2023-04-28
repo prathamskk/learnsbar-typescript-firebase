@@ -1,17 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAudioRecorder } from 'react-audio-voice-recorder'
 import MicIcon from '@mui/icons-material/Mic'
-import { Stack, Box } from '@mui/material'
+import { Stack, Box, Button } from '@mui/material'
+import fixWebmDuration from "fix-webm-duration";
+import { WavRecorder } from "webm-to-wav-converter";
 const Recorder = (props: {
   setRecording: React.Dispatch<React.SetStateAction<Blob | undefined>>
 }) => {
   const { startRecording, stopRecording, recordingBlob, isRecording, recordingTime } =
     useAudioRecorder()
+  const [submittedOnce, setSubmittedOnce] = useState(false)
 
+  const ref = React.useRef();
   useEffect(() => {
-    console.log(recordingBlob)
-    props.setRecording(recordingBlob)
-  }, [recordingBlob])
+    // @ts-ignore
+    ref.current = new WavRecorder();
+  }, []);
 
   return (
     <>
@@ -21,8 +25,13 @@ const Recorder = (props: {
           onClick={() => {
             if (!isRecording) {
               startRecording()
+              // @ts-ignore
+              ref.current.start()
             } else {
               stopRecording()
+              setSubmittedOnce(true)
+              // @ts-ignore
+              ref.current.stop()
             }
           }}
         >
@@ -51,6 +60,14 @@ const Recorder = (props: {
             </Box>
           </Box>
         </Box>
+        <Button size='large' variant='contained' disabled={!submittedOnce} onClick={() => {
+          // @ts-ignore
+          ref.current.getBlob().then((blob) => {
+            props.setRecording(blob)
+          })
+        }}>
+          Done
+        </Button>
       </Stack>
     </>
   )

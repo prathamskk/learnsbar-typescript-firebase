@@ -8,6 +8,7 @@ import ScenarioDetailPage from './pages/scenarios/ScenarioDetailPage'
 import AttemptsPage from './pages/AllAttemptsPage'
 import NewAttemptPage from './pages/scenarios/NewAttemptPage'
 import ScenarioAttemptsPage from './pages/scenarios/ScenarioAttemptsPage'
+import DiseasePredictionPage from './pages/DiseasePredictionPage'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path='scenarios/:scenarioId' element={<ScenarioDetailPage />} />
         <Route path='scenarios/:scenarioId/new' element={<NewAttemptPage />} />
         <Route path='scenarios/:scenarioId/attempts' element={<ScenarioAttemptsPage />} />
+        <Route path='diseaseprediction' element={<DiseasePredictionPage />} />
       </Route>
       <Route path='login' element={<LoginPage />} />
     </Routes>
